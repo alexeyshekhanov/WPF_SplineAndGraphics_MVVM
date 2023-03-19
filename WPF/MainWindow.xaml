@@ -1,0 +1,135 @@
+﻿<Window x:Class="WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:DataConverter x:Key="DataConverter"/>
+        <local:RadioButtonConverter x:Key="RadioButtonConverter"/>
+        <local:ListOfFunctionsConverter x:Key="ListOfFunctionsConverter"/>
+        <local:NewCoordinatesConverter x:Key="NewCoordinatesConverter"/>
+        <DataTemplate x:Key="SplineDataTemplate">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Coordinate: "/>
+                    <TextBlock Text="{Binding Path=coordinate, StringFormat= N3}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Value: "/>
+                    <TextBlock Text="{Binding Path=value, StringFormat= N3}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Second derivative: "/>
+                        <TextBlock Text="{Binding Path=valueOfSecondDerivative, StringFormat= N3}"/>
+                    </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Name="MainGrid">
+        <Label Content="RawData initialization:" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Height="27" Width="126"/>
+        <Label Content="Left limit:" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="63"/>
+        <Label Content="Right limit:" HorizontalAlignment="Left" Margin="10,86,0,0" VerticalAlignment="Top" Width="71"/>
+        <Label Content="Number of nodes:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Width="117"/>
+        <Label Content="Choose grid type:" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top" Width="117"/>
+        <Label Content="Choose the function:" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" Width="126"/>
+        <TextBox Name ="TextBoxRawDataLeftLimit" HorizontalAlignment="Left" Margin="143,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="LeftLimitOfSegment" UpdateSourceTrigger="PropertyChanged"  NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Name="TextBoxRawDataNumberOfNodes" HorizontalAlignment="Left" Margin="143,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="NumberOfNodes" UpdateSourceTrigger="PropertyChanged"  NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Name="TextBoxRawDataRightLimit" HorizontalAlignment="Left" Margin="143,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="RightLimitOfSegment" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <RadioButton IsChecked="{Binding Path=IsUniform, Converter={StaticResource RadioButtonConverter}, ConverterParameter=true}" Name="ButtonRawDataIsUniform" Content="Uniform" HorizontalAlignment="Left" Margin="143,144,0,0" VerticalAlignment="Top"/>
+        <RadioButton IsChecked="{Binding Path=IsUniform, Converter={StaticResource RadioButtonConverter}, ConverterParameter=false}" Name="ButtonRawDataIsNotUniform" Content="Non uniform" HorizontalAlignment="Left" Margin="210,144,0,0" VerticalAlignment="Top"/>
+        <ComboBox Text ="{Binding Path=Function, Converter={StaticResource ListOfFunctionsConverter}}" Name="ComboBoxRawDataListOfFunctions" HorizontalAlignment="Left" Margin="143,168,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="SplineData initialization:" HorizontalAlignment="Left" Margin="400,28,0,0" VerticalAlignment="Top" Width="144"/>
+        <Label Content="Number of nodes:" HorizontalAlignment="Left" Margin="400,60,0,0" VerticalAlignment="Top" Width="106"/>
+        <Label Content="Coordinates of nodes:" HorizontalAlignment="Left" Margin="400,86,0,0" VerticalAlignment="Top" Width="127"/>
+        <Label Content="Left and right 2nd derivatives:" HorizontalAlignment="Left" Margin="400,112,0,0" VerticalAlignment="Top" Width="167"/>
+        <TextBox Name ="TextBoxSplineDataNumberOfNodes" HorizontalAlignment="Left" Margin="572,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="numberOfNodesToCalculateValues" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Name ="TextBoxSplineDataCoordinates" HorizontalAlignment="Left" Margin="572,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="newNodesOfgrid" Converter="{StaticResource NewCoordinatesConverter}" ConverterParameter="numberOfNodesToCalculateValues">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Name ="TextBoxSplineDataDerivatives" HorizontalAlignment="Left" Margin="572,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <MultiBinding Converter="{StaticResource DataConverter}">
+                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="valueOfSecondDerivativeInTheLeftLimit"/>
+                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="valueOfSecondDerivativeInTheRightLimit"/>
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
+        <ListBox Name ="ListBoxOutputRawData" Margin="10,248,595,10"/>
+        <Label Content="Output:" HorizontalAlignment="Left" Margin="10,191,0,0" VerticalAlignment="Top" Width="176"/>
+        <Label Content="RawData nodes and values:" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="195"/>
+        <Label Content="SplineData nodes, values and derivatives:" HorizontalAlignment="Left" Margin="234,222,0,0" VerticalAlignment="Top" Width="230"/>
+        <ListBox ItemTemplate="{StaticResource SplineDataTemplate}" Name ="ListBoxOutputSplineData" Margin="234,248,336,15"/>
+        <Label Content="Information about the node you've chosen:" HorizontalAlignment="Left" Margin="506,222,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.518,-0.563" Width="245"/>
+        <TextBlock Name ="TextBlockChosenNode" HorizontalAlignment="Left" Margin="506,252,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}Coordinate: {0:N3}, &#x0a;Value: {1:N3}, &#x0a;First derivative: {2:N3}, &#x0a;Second derivative: {3:N3}">
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.coordinate"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.value"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.valueOfFirstDerivative"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.valueOfSecondDerivative"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <Label Content="Value of the integral:" HorizontalAlignment="Left" Margin="506,330,0,0" VerticalAlignment="Top" Width="232"/>
+        <TextBlock Name="TextBlockValueOfTheIntegral" HorizontalAlignment="Left" Margin="506,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232"/>
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="File">
+                    <MenuItem Click="onClickSave" Header="Save"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Execute">
+                    <MenuItem Click="onClickFromFile" Header="RawData from File"></MenuItem>
+                    <MenuItem Click="onClickFromControls" Header="RawData from Controls"></MenuItem>
+                </MenuItem>
+                <Button Click="Button_Click_1" Content="Button"/>
+
+            </Menu>
+        </StackPanel>
+    </Grid>
+</Window>
