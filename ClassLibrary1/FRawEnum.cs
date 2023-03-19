@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp21
+namespace ConsoleApp1
 {
     public enum FRawEnum
     {

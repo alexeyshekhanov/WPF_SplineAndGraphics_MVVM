@@ -1,4 +1,5 @@
-﻿using ConsoleApp21;
+﻿using ConsoleApp1;
+//using ConsoleApp21;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -33,9 +34,9 @@ namespace WPF
             set
             { 
                 leftLimitOfSegment = value;
-                if (PropertyChanged != null) 
+                if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("leftLimitOfSegment"));
-                
+
             }
         }
         
@@ -45,7 +46,7 @@ namespace WPF
             set 
             {
                 rightLimitOfSegment= value;
-                if (PropertyChanged != null) 
+                if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("rightLimitOfSegment"));
             }
         }
@@ -84,7 +85,8 @@ namespace WPF
 
         public double valueOfSecondDerivativeInTheRightLimit { get; set; }
         public double valueOfSecondDerivativeInTheLeftLimit { get; set; }
-        public double[] newNodesOfgrid { get; set; }
+        
+        // public double[] newNodesOfgrid { get; set; }
 
         public string Error
         {
@@ -97,7 +99,12 @@ namespace WPF
             get
             {
                 string error = string.Empty;
-                switch(columnName)
+                //if ((columnName == "RightLimitOfSegment") || (columnName == "LeftLimitOfSegment"))
+                //{
+                //    if (LeftLimitOfSegment >= RightLimitOfSegment)
+                //        return "Values cannot be the same";
+                //}
+                switch (columnName)
                 {
                     case nameof(RightLimitOfSegment):
                         if (RightLimitOfSegment <= LeftLimitOfSegment)
@@ -106,7 +113,7 @@ namespace WPF
                         }
                         break;
                     case nameof(LeftLimitOfSegment):
-                        if (LeftLimitOfSegment >= RightLimitOfSegment )
+                        if (LeftLimitOfSegment >= RightLimitOfSegment)
                         {
                             error = "Invalid left limit";
                         }
@@ -118,18 +125,18 @@ namespace WPF
                         }
                         break;
                     case nameof(numberOfNodesToCalculateValues):
-                        if(numberOfNodesToCalculateValues < 1 || numberOfNodesToCalculateValues != newNodesOfgrid.Length)
+                        if(numberOfNodesToCalculateValues < 2) //|| numberOfNodesToCalculateValues != newNodesOfgrid.Length)
                         {
                             error = "Invalid number of nodes to calculate values";
                         }
                         break;
-                    case nameof(newNodesOfgrid):
-                        if(newNodesOfgrid.Length != numberOfNodesToCalculateValues)
-                        {
-                            error = "Invalid nodes to calculate values";
-                        }
-                        //error = this[nameof(numberOfNodesToCalculateValues)];
-                        break;
+                    //case nameof(newNodesOfgrid):
+                    //    if(newNodesOfgrid.Length != numberOfNodesToCalculateValues)
+                    //    {
+                    //        error = "Invalid nodes to calculate values";
+                    //    }
+                    //    //error = this[nameof(numberOfNodesToCalculateValues)];
+                    //    break;
                     case nameof(valueOfSecondDerivativeInTheLeftLimit):
                         break;
                     case nameof(valueOfSecondDerivativeInTheRightLimit):
@@ -143,7 +150,7 @@ namespace WPF
             int numberOfNodes, bool isUniform, FRaw function, 
             int numberOfNodesToCalculateValues, 
             double valueOfSecondDerivativeInTheLeftLimit, 
-            double valueOfSecondDerivativeInTheRightLimit, double[] newNodesOfgrid)
+            double valueOfSecondDerivativeInTheRightLimit)// double[] newNodesOfgrid)
         {
             this.LeftLimitOfSegment = leftLimitOfSegment;
             this.RightLimitOfSegment = rightLimitOfSegment;
@@ -153,14 +160,14 @@ namespace WPF
             this.numberOfNodesToCalculateValues = numberOfNodesToCalculateValues;
             this.valueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
             this.valueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
-            this.newNodesOfgrid = newNodesOfgrid;
+            //this.newNodesOfgrid = newNodesOfgrid;
 
             this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function);
-            this.splineData = new SplineData(rawData, 
-                valueOfSecondDerivativeInTheLeftLimit, 
-                valueOfSecondDerivativeInTheRightLimit, 
-                numberOfNodesToCalculateValues, 
-                 newNodesOfgrid);
+            this.splineData = new SplineData(rawData,
+                valueOfSecondDerivativeInTheLeftLimit,
+                valueOfSecondDerivativeInTheRightLimit,
+                numberOfNodesToCalculateValues);
+                 //newNodesOfgrid);
         }
 
         public void Save(string filename)
@@ -188,11 +195,11 @@ namespace WPF
             rawData = rawdata;
             rawData.initializeTheValues();
 
-            var splinedata = new SplineData(rawData, 
-                valueOfSecondDerivativeInTheLeftLimit, 
-                valueOfSecondDerivativeInTheRightLimit, 
-                numberOfNodesToCalculateValues, 
-                newNodesOfgrid);
+            var splinedata = new SplineData(rawData,
+                valueOfSecondDerivativeInTheLeftLimit,
+                valueOfSecondDerivativeInTheRightLimit,
+                numberOfNodesToCalculateValues);
+                //newNodesOfgrid);
             splineData = splinedata;
             splineData.splineConstruction();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -6,28 +7,26 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2
+namespace ConsoleApp1
 {
-    public class SplineData
+    public class SplineData: IEnumerable<string>
     {
         public RawData gridForSpline;
-        public int NumberOfNodesToCalculateValues;
+        public int numberOfNodesToCalculateValues;
         public List<SplineDataItem> calculatedSplineValues;
         public double ?valueOfIntegral;
 
         public double valueOfSecondDerivativeInTheRightLimit;
         public double valueOfSecondDerivativeInTheLeftLimit;
-        public double[] newNodesOfgrid;
 
 
         public SplineData(RawData gridForSpline, 
             double valueOfSecondDerivativeInTheLeftLimit, 
             double valueOfSecondDerivativeInTheRightLimit,
-            int NumberOfNodesToCalculateValues,
-            double[] newNodesOfgrid)
+            int NumberOfNodesToCalculateValues)
         {
             this.gridForSpline = gridForSpline;
-            this.NumberOfNodesToCalculateValues = NumberOfNodesToCalculateValues;
+            this.numberOfNodesToCalculateValues = NumberOfNodesToCalculateValues;
             this.valueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
             this.valueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
 
@@ -40,9 +39,6 @@ namespace ConsoleApp2
             //    0, valueOfSecondDerivativeInTheLeftLimit);
             //calculatedSplineValues.Add(leftLimititem);
             //calculatedSplineValues.Add(rightLimititem);
-
-            this.newNodesOfgrid = new double[newNodesOfgrid.Length];
-            this.newNodesOfgrid = newNodesOfgrid;
         }
 
         public void splineConstruction()
@@ -58,8 +54,19 @@ namespace ConsoleApp2
             }
             double[] bc = new double[] { valueOfSecondDerivativeInTheLeftLimit, valueOfSecondDerivativeInTheRightLimit };
             double[] scoeff = new double[ny * 4 * (nx - 1)];
-            int nsite = newNodesOfgrid.Length;
-            double[] site = newNodesOfgrid;
+            int nsite = numberOfNodesToCalculateValues;
+
+            double[] newNodes = new double[numberOfNodesToCalculateValues];
+            newNodes[0] = gridForSpline.leftLimitOfSegment;
+            newNodes[numberOfNodesToCalculateValues - 1] = gridForSpline.rightLimitOfSegment;
+            var stepOfTheGrid = (gridForSpline.rightLimitOfSegment - gridForSpline.leftLimitOfSegment) /
+                (numberOfNodesToCalculateValues - 1);
+            for (int i = 1; i < numberOfNodesToCalculateValues - 1; i++)
+            {
+                newNodes[i] = gridForSpline.leftLimitOfSegment + stepOfTheGrid * i;
+            }
+
+            double[] site = newNodes;
             int ndorder = 3;
             int[] dorder = new int[3] { 1, 1, 1 };
             var numberOfNonZeroElementsInDorder = 0;
@@ -85,12 +92,12 @@ namespace ConsoleApp2
                     throw new Exception("ERROR");
                 }
 
-                for (int i = 0; i < newNodesOfgrid.Length; i++)
+                for (int i = 0; i < newNodes.Length; i++)
                 {
-                    var temp = new SplineDataItem(newNodesOfgrid[i], 
+                    var temp = new SplineDataItem(newNodes[i], 
                         interpolationValues[3 * i], 
                         interpolationValues[3 * i + 1], 
-                        interpolationValues[2 * i + 2]);
+                        interpolationValues[3 * i + 2]);
                     //calculatedSplineValues.Insert(calculatedSplineValues.Count - 2, temp);
                     calculatedSplineValues.Add(temp);
                 }
@@ -127,5 +134,15 @@ namespace ConsoleApp2
             double[] bc, double[] scoeff, int nsite, double[] site,
             int ndorder, int[] dorder, double[] interpolationValues,
             int nlim, double[] llim, double[] rlim, double[] integrationValues, ref int ret);
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
