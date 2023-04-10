@@ -19,7 +19,7 @@ namespace ConsoleApp1
         }
         public static double random(double x)
         {
-            var rnd = new Random((int)x);
+            var rnd = new Random();
             return rnd.NextDouble();
         }
     }

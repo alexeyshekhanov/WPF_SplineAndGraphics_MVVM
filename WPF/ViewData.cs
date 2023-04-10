@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 
 namespace WPF
 {
@@ -27,6 +28,9 @@ namespace WPF
         private int numberOfNodes;
         private bool isUniform;
         private FRaw function;
+
+        public double[] nodesOfGridRD;
+        public double[] valuesInNodesRD;
 
         public double LeftLimitOfSegment
         {
@@ -157,10 +161,13 @@ namespace WPF
             this.NumberOfNodes = numberOfNodes;
             this.IsUniform = isUniform;
             this.Function = function;
+            this.nodesOfGridRD = new double[numberOfNodes];
+            this.valuesInNodesRD = new double[numberOfNodes];
             this.numberOfNodesToCalculateValues = numberOfNodesToCalculateValues;
             this.valueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
             this.valueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
             //this.newNodesOfgrid = newNodesOfgrid;
+
 
             this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function);
             this.splineData = new SplineData(rawData,
@@ -172,8 +179,8 @@ namespace WPF
 
         public void Save(string filename)
         {
-            RawData obj = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function);
-            obj.initializeTheValues();
+            RawData obj = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function, rawData.nodesOfGrid, rawData.valuesInNodes);
+            //obj.initializeTheValues();
             obj.Save(filename);
         }
 
@@ -185,8 +192,24 @@ namespace WPF
             NumberOfNodes = obj.numberOfNodes;
             IsUniform = obj.isUniform;
             Function = obj.function;
+            nodesOfGridRD = obj.nodesOfGrid;
+            valuesInNodesRD = obj.valuesInNodes;
             //rawData = obj;
             
+        }
+
+        public void inputFromFile()
+        {
+            var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, function, nodesOfGridRD, valuesInNodesRD);
+            rawData = rawdata;
+
+            var splinedata = new SplineData(rawData,
+                valueOfSecondDerivativeInTheLeftLimit,
+                valueOfSecondDerivativeInTheRightLimit,
+                numberOfNodesToCalculateValues);
+            //newNodesOfgrid);
+            splineData = splinedata;
+            splineData.splineConstruction();
         }
 
         public void inputFromControls()

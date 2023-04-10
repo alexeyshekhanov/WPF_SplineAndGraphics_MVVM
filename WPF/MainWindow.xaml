@@ -13,7 +13,7 @@
             Executed="outputAndGraphics"
             CanExecute="dataValidationFromControls"/>
         <CommandBinding Command="{x:Static local:CustomCommands.FromFile}"
-            Executed="outputAndGraphics"
+            Executed="outputAndGraphicsFromFile"
             CanExecute="dataValidationFromFile"/>
         <CommandBinding Command="ApplicationCommands.Save"
             Executed="saveToFile"

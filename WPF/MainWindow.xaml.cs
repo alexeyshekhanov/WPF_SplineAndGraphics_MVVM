@@ -122,6 +122,27 @@ namespace WPF
             drawSpline();
         }
 
+        private void outputAndGraphicsFromFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            fromFile();
+            drawSpline();
+        }
+
+        private void fromFile()
+        {
+            try
+            {
+                viewData.inputFromFile();
+
+                outputData();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMessageDialog(ex.Message);
+                return;
+            }
+        }
+
         private void dataValidationFromControls(object sender, CanExecuteRoutedEventArgs e)
         {
             if (isValidationError())

@@ -19,7 +19,13 @@ namespace ConsoleApp1
         public double[] nodesOfGrid;
         public double[] valuesInNodes;
 
-        public RawData(double leftLimitOfSegment, double rightLimitOfSegment, int numberOfNodes, bool isUniform, FRaw function)
+        public RawData(double leftLimitOfSegment, 
+            double rightLimitOfSegment, 
+            int numberOfNodes, 
+            bool isUniform, 
+            FRaw function)
+            //double[] valuesInNodes,
+            //double[] nodesOfGrid)
         {
             this.leftLimitOfSegment = leftLimitOfSegment;
             this.rightLimitOfSegment = rightLimitOfSegment;
@@ -28,9 +34,28 @@ namespace ConsoleApp1
             this.function = function;
             nodesOfGrid = new double[numberOfNodes];
             valuesInNodes = new double[numberOfNodes];
-            
+            //this.valuesInNodes = valuesInNodes;
+            //this.nodesOfGrid = nodesOfGrid;   
+            initializeTheValues();
         }
-        
+
+        public RawData(double leftLimitOfSegment, 
+            double rightLimitOfSegment, 
+            int numberOfNodes, 
+            bool isUniform, 
+            FRaw function, 
+            double[] nodesOfGrid, 
+            double[] valuesInNodes)
+        {
+            this.leftLimitOfSegment = leftLimitOfSegment;
+            this.rightLimitOfSegment = rightLimitOfSegment;
+            this.numberOfNodes = numberOfNodes;
+            this.isUniform = isUniform;
+            this.function = function;
+            this.valuesInNodes = valuesInNodes;
+            this.nodesOfGrid = nodesOfGrid;
+        }
+
         public RawData()
         {
             //this.function = function;
@@ -47,13 +72,11 @@ namespace ConsoleApp1
             this.numberOfNodes = obj.numberOfNodes;
             this.isUniform = obj.isUniform;
             this.function = obj.function;
-            this.nodesOfGrid = new double[obj.numberOfNodes];
-            this.valuesInNodes = new double[obj.numberOfNodes];
-            //for (int i = 0; i < obj.numberOfNodes; i++)
-            //{
-            //    this.nodesOfGrid[i] = obj.nodesOfGrid[i];
-            //    this.valuesInNodes[i] = obj.valuesInNodes[i];
-            //}
+            //this.nodesOfGrid = new double[obj.numberOfNodes];
+            //this.valuesInNodes = new double[obj.numberOfNodes;
+            this.nodesOfGrid = obj.nodesOfGrid;
+            this.valuesInNodes = obj.valuesInNodes;
+
         }
 
         public void initializeTheValues()
@@ -122,6 +145,11 @@ namespace ConsoleApp1
                 else if (function == Functions.random)
                     temp = "random";
                 writer.Write(temp);
+                for (int i = 0; i < numberOfNodes; i++)
+                {
+                    writer.Write(nodesOfGrid[i]);
+                    writer.Write(valuesInNodes[i]);
+                }
                 return true;
             }
             catch (IOException)
@@ -172,6 +200,11 @@ namespace ConsoleApp1
                     rawData.function = Functions.random;
                 rawData.nodesOfGrid = new double[rawData.numberOfNodes];
                 rawData.valuesInNodes = new double[rawData.numberOfNodes];
+                for (int i = 0; i < rawData.numberOfNodes; i++)
+                {
+                    rawData.nodesOfGrid[i] = reader.ReadDouble();
+                    rawData.valuesInNodes[i] = reader.ReadDouble();
+                }
             }
             catch (EndOfStreamException)
             {
