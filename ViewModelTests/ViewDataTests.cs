@@ -9,6 +9,15 @@ using ViewModel;
 
 namespace ViewModelTests
 {
+    public static class FunctionNames
+    {
+        public static string cube = "cube", linear = "linear", random = "random";
+
+        public static List<string> ToList()
+        {
+            return new List<string> { cube, linear, random };
+        }
+    }
 
     public class UIFunctionsTest : IUIFunctions
     {
@@ -28,7 +37,7 @@ namespace ViewModelTests
         [Fact]
         public void LoadNullTest()
         {
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
             var exeption = Assert.Throws<Exception>(() => viewData.Load(null));
             Assert.Equal("ERROR: NULL INSTEAD OF FILE NAME", exeption.Message);
         }
@@ -36,7 +45,7 @@ namespace ViewModelTests
         [Fact]
         public void LoadEmptyTest()
         {
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
             var exeption = Assert.Throws<Exception>(() => viewData.Load(""));
             Assert.Equal("ERROR: FILE NAME ERROR", exeption.Message);
         }
@@ -44,7 +53,7 @@ namespace ViewModelTests
         [Fact]
         public void SaveNullTest()
         {
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
             var exeption = Assert.Throws<Exception>(() => viewData.Save(null));
             Assert.Equal("ERROR: NULL INSTEAD OF FILE NAME", exeption.Message);
         }
@@ -52,7 +61,7 @@ namespace ViewModelTests
         [Fact]
         public void SaveEmptyTest()
         {
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube   , 100, 12, 36, null, null);
             var exeption = Assert.Throws<Exception>(() => viewData.Save(""));
             Assert.Equal("ERROR: FILE NAME ERROR", exeption.Message);
         }
@@ -60,7 +69,7 @@ namespace ViewModelTests
         [Fact]
         public void NumberOfNodesInvalidTest()
         {
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
             viewData.NumberOfNodes = 0;
             Assert.True(viewData[nameof(viewData.NumberOfNodes)] == "Invalid number of nodes");
         }
@@ -68,7 +77,7 @@ namespace ViewModelTests
         [Fact]
         public void ValidationErrorTest()
         {
-            var viewData = new ViewData(1, 0, 5, true, Functions.cube, 100, 12, 36, null, null);
+            var viewData = new ViewData(1, 0, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
             Assert.True(viewData.isValidationError());
             Assert.True(viewData.isValidationErrorInRawData());
         }
@@ -77,7 +86,7 @@ namespace ViewModelTests
         public void FromControlsCommandTest()
         {
             var uiFunctionTest = new UIFunctionsTest();
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 9, 12, 36, uiFunctionTest, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 9, 12, 36, uiFunctionTest, null);
             viewData.FromControlsCommand.Execute(null);
             //Assert.True(viewData.rawDataList.Contains("Coordinate: " + "2.000" + "\nValue: " + "8.000"));
             Assert.Equal(5, viewData.rawDataList.Count);
@@ -113,19 +122,19 @@ namespace ViewModelTests
         public void SaveFromFileCommandsTest()
         {
             var uiFunctionTest = new UIFunctionsTest();
-            var viewData = new ViewData(2, 6, 5, true, Functions.cube, 9, 12, 36, uiFunctionTest, null);
+            var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 9, 12, 36, uiFunctionTest, null);
             viewData.SaveCommand.Execute(null);
             viewData.LeftLimitOfSegment = 0;
             viewData.RightLimitOfSegment = 1;
             viewData.NumberOfNodes = 10;
             viewData.IsUniform = false;
-            viewData.Function = Functions.linear;
+            viewData.Function = FunctionNames.linear;
             viewData.FromFileCommand.Execute(null);
             viewData.LeftLimitOfSegment.Should().Be(2);
             viewData.RightLimitOfSegment.Should().Be(6);
             viewData.NumberOfNodes.Should().Be(5);
             viewData.IsUniform.Should().Be(true);
-            Assert.Equal(Functions.cube, viewData.Function);
+            Assert.Equal(FunctionNames.cube, viewData.Function);
         }
     }
 }

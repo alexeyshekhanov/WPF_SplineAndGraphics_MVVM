@@ -37,7 +37,7 @@ namespace ViewModel
         private double rightLimitOfSegment;
         private int numberOfNodes;
         private bool isUniform;
-        private FRaw function;
+        private string function;
         private double? valueOfIntegral;
 
         public double[] nodesOfGridRD;
@@ -103,7 +103,7 @@ namespace ViewModel
                     PropertyChanged(this, new PropertyChangedEventArgs("isUniform"));
             }
         }
-        public FRaw Function 
+        public string Function 
         { 
             get { return function; }
             set
@@ -192,7 +192,7 @@ namespace ViewModel
         }
 
         public ViewData(double leftLimitOfSegment, double rightLimitOfSegment, 
-            int numberOfNodes, bool isUniform, FRaw function, 
+            int numberOfNodes, bool isUniform, string function, 
             int numberOfNodesToCalculateValues, 
             double valueOfSecondDerivativeInTheLeftLimit, 
             double valueOfSecondDerivativeInTheRightLimit, 
@@ -212,7 +212,7 @@ namespace ViewModel
             //this.newNodesOfgrid = newNodesOfgrid;
 
 
-            this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function);
+            this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function));
             this.splineData = new SplineData(rawData,
                 valueOfSecondDerivativeInTheLeftLimit,
                 valueOfSecondDerivativeInTheRightLimit,
@@ -389,7 +389,7 @@ namespace ViewModel
         {
             try
             {
-                RawData obj = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, function, rawData.nodesOfGrid, rawData.valuesInNodes);
+                RawData obj = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function), rawData.nodesOfGrid, rawData.valuesInNodes);
                 obj.Save(filename);
             }
             catch (Exception ex)
@@ -407,7 +407,7 @@ namespace ViewModel
                 RightLimitOfSegment = obj.rightLimitOfSegment;
                 NumberOfNodes = obj.numberOfNodes;
                 IsUniform = obj.isUniform;
-                Function = obj.function;
+                Function = FrawToStringConverter(obj.function);
                 nodesOfGridRD = obj.nodesOfGrid;
                 valuesInNodesRD = obj.valuesInNodes;
                 //rawData = obj;
@@ -420,7 +420,7 @@ namespace ViewModel
 
         public void inputFromFile()
         {
-            var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, function, nodesOfGridRD, valuesInNodesRD);
+            var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function), nodesOfGridRD, valuesInNodesRD);
             rawData = rawdata;
 
             var splinedata = new SplineData(rawData,
@@ -434,7 +434,7 @@ namespace ViewModel
 
         public void inputFromControls()
         {
-            var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, function);
+            var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function));
             rawData = rawdata;
             rawData.initializeTheValues();
 
@@ -487,6 +487,44 @@ namespace ViewModel
             discreteLineseries.Title = "Discrete data";
             plotModel.Series.Add(discreteLineseries);
             onPropertyChanged(nameof(plotModel));
+        }
+
+        public FRaw StringToFrawConverter(string func)
+        {
+            FRaw tmp = Functions.cube;
+            if (func == "cube")
+            {
+                tmp = Functions.cube;
+                return tmp;
+            }
+            else if (func == "linear")
+            {
+                tmp = Functions.linear;
+                return tmp;
+            }
+            else if (func == "random")
+            {
+                tmp = Functions.random;
+                return tmp;
+            }
+            return tmp;
+        }
+
+        public string FrawToStringConverter(FRaw fRaw)
+        {
+            if (fRaw == Functions.cube)
+            {
+                return "cube";
+            }
+            else if (fRaw == Functions.linear)
+            {
+                return "linear";
+            }
+            else if (fRaw == Functions.random)
+            {
+                return "random";
+            }
+            return "err";
         }
 
         public delegate void Function1(string a);

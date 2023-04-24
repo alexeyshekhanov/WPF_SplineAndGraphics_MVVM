@@ -1,4 +1,4 @@
-﻿using ConsoleApp1;
+﻿//using ConsoleApp1;
 //using ConsoleApp2;
 //using ConsoleApp21;
 using Microsoft.Win32;
@@ -21,6 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using View;
 using ViewModel;
 //using ViewModel;
 
@@ -39,7 +40,7 @@ namespace WPF
             
             AppUIFunctions appUIFunctions = new AppUIFunctions();
             MessageNotifier messageNotifier = new MessageNotifier();
-            viewData = new ViewData(2, 6, 5, true, Functions.cube, 100, 12, 36, appUIFunctions, messageNotifier);
+            viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 100, 12, 36, appUIFunctions, messageNotifier);
             InitializeComponent();
             comboBoxCreation();
             this.DataContext = viewData;
@@ -47,7 +48,7 @@ namespace WPF
 
         private void comboBoxCreation()
         {
-            foreach (var value in Enum.GetValues(typeof(FRawEnum)))
+            foreach (var value in FunctionNames.ToList())   //Enum.GetValues(typeof(FRawEnum))
             {
                 ComboBoxRawDataListOfFunctions.Items.Add(value);
             }

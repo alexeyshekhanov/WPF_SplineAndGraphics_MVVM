@@ -21,7 +21,7 @@
     <Window.Resources>
         <local:DataConverter x:Key="DataConverter"/>
         <local:RadioButtonConverter x:Key="RadioButtonConverter"/>
-        <local:ListOfFunctionsConverter x:Key="ListOfFunctionsConverter"/>
+        <!--<local:ListOfFunctionsConverter x:Key="ListOfFunctionsConverter"/>-->
         <local:NewCoordinatesConverter x:Key="NewCoordinatesConverter"/>
         <DataTemplate x:Key="SplineDataTemplate">
             <StackPanel Orientation="Vertical">
@@ -96,7 +96,7 @@
         </TextBox>
         <RadioButton IsChecked="{Binding Path=IsUniform, Converter={StaticResource RadioButtonConverter}, ConverterParameter=true}" Name="ButtonRawDataIsUniform" Content="Uniform" HorizontalAlignment="Left" Margin="143,144,0,0" VerticalAlignment="Top"/>
         <RadioButton IsChecked="{Binding Path=IsUniform, Converter={StaticResource RadioButtonConverter}, ConverterParameter=false}" Name="ButtonRawDataIsNotUniform" Content="Non uniform" HorizontalAlignment="Left" Margin="210,144,0,0" VerticalAlignment="Top"/>
-        <ComboBox Text ="{Binding Path=Function, Converter={StaticResource ListOfFunctionsConverter}}" Name="ComboBoxRawDataListOfFunctions" HorizontalAlignment="Left" Margin="143,168,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Text ="{Binding Path=Function}" Name="ComboBoxRawDataListOfFunctions" HorizontalAlignment="Left" Margin="143,168,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="SplineData initialization:" HorizontalAlignment="Left" Margin="400,28,0,0" VerticalAlignment="Top" Width="144"/>
         <Label Content="Number of nodes:" HorizontalAlignment="Left" Margin="400,60,0,0" VerticalAlignment="Top" Width="106"/>
         <Label Content="Left and right 2nd derivatives:" HorizontalAlignment="Left" Margin="400,86,0,0" VerticalAlignment="Top" Width="167"/>
