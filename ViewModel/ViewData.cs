@@ -2,19 +2,9 @@
 using OxyPlot;
 using OxyPlot.Legends;
 using OxyPlot.Series;
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media.TextFormatting;
 
 namespace ViewModel
 {
@@ -143,11 +133,6 @@ namespace ViewModel
             get
             {
                 string error = string.Empty;
-                //if ((columnName == "RightLimitOfSegment") || (columnName == "LeftLimitOfSegment"))
-                //{
-                //    if (LeftLimitOfSegment >= RightLimitOfSegment)
-                //        return "Values cannot be the same";
-                //}
                 switch (columnName)
                 {
                     case nameof(RightLimitOfSegment):
@@ -169,18 +154,11 @@ namespace ViewModel
                         }
                         break;
                     case nameof(numberOfNodesToCalculateValues):
-                        if(numberOfNodesToCalculateValues < 2) //|| numberOfNodesToCalculateValues != newNodesOfgrid.Length)
+                        if(numberOfNodesToCalculateValues < 2) 
                         {
                             error = "Invalid number of nodes to calculate values";
                         }
                         break;
-                    //case nameof(newNodesOfgrid):
-                    //    if(newNodesOfgrid.Length != numberOfNodesToCalculateValues)
-                    //    {
-                    //        error = "Invalid nodes to calculate values";
-                    //    }
-                    //    //error = this[nameof(numberOfNodesToCalculateValues)];
-                    //    break;
                     case nameof(valueOfSecondDerivativeInTheLeftLimit):
                         break;
                     case nameof(valueOfSecondDerivativeInTheRightLimit):
@@ -197,7 +175,7 @@ namespace ViewModel
             double valueOfSecondDerivativeInTheLeftLimit, 
             double valueOfSecondDerivativeInTheRightLimit, 
             IUIFunctions uiFunctions,
-            IExceptionNotifier exceptionNotifier)// double[] newNodesOfgrid)
+            IExceptionNotifier exceptionNotifier)
         {
             this.LeftLimitOfSegment = leftLimitOfSegment;
             this.RightLimitOfSegment = rightLimitOfSegment;
@@ -209,7 +187,6 @@ namespace ViewModel
             this.numberOfNodesToCalculateValues = numberOfNodesToCalculateValues;
             this.valueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
             this.valueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
-            //this.newNodesOfgrid = newNodesOfgrid;
 
 
             this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function));
@@ -217,7 +194,6 @@ namespace ViewModel
                 valueOfSecondDerivativeInTheLeftLimit,
                 valueOfSecondDerivativeInTheRightLimit,
                 numberOfNodesToCalculateValues);
-            //newNodesOfgrid);
 
             rawDataList = new ObservableCollection<string>();
 
@@ -287,65 +263,6 @@ namespace ViewModel
 
                 });
         }
-
-        //public void outputAndGraphicsFromFile()
-        //{
-        //    try
-        //    {
-        //        inputFromFile();
-        //        outputData();
-        //        drawSpline();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        exceptionNotifier.ShowErrorMessage(ex.Message);
-        //        return;
-        //    }
-
-        //}
-
-        //private void outputAndGraphics()
-        //{
-        //    try
-        //    {
-        //        inputFromControls();
-        //        outputData();
-        //        drawSpline();
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
-
-        //private void outputAndGraphics()
-        //{
-        //    try
-        //    {
-        //        inputFromControls();
-        //        outputData();
-
-        //        var splineDataX = new double[numberOfNodesToCalculateValues];
-        //        var splineDataY = new double[numberOfNodesToCalculateValues];
-        //        for (int i = 0; i < numberOfNodesToCalculateValues; i++)
-        //        {
-        //            splineDataX[i] = splineData.calculatedSplineValues[i].coordinate;
-        //            splineDataY[i] = splineData.calculatedSplineValues[i].value;
-        //        }
-        //        var rawDataX = new double[NumberOfNodes];
-        //        var rawDataY = new double[NumberOfNodes];
-        //        rawDataX = rawData.nodesOfGrid;
-        //        rawDataY = rawData.valuesInNodes;
-        //        uiFunctions.DrawSpline(rawDataX, rawDataY, splineDataX, splineDataY);
-                
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        exceptionNotifier.ShowErrorMessage(ex.Message);
-        //        return;
-        //    }
-        //}
-
         public void outputData()
         {
             rawDataList.Clear();
@@ -410,7 +327,6 @@ namespace ViewModel
                 Function = FrawToStringConverter(obj.function);
                 nodesOfGridRD = obj.nodesOfGrid;
                 valuesInNodesRD = obj.valuesInNodes;
-                //rawData = obj;
             }
             catch(Exception ex)
             {
@@ -427,7 +343,6 @@ namespace ViewModel
                 valueOfSecondDerivativeInTheLeftLimit,
                 valueOfSecondDerivativeInTheRightLimit,
                 numberOfNodesToCalculateValues);
-            //newNodesOfgrid);
             splineData = splinedata;
             splineData.splineConstruction();
         }
@@ -442,7 +357,6 @@ namespace ViewModel
                 valueOfSecondDerivativeInTheLeftLimit,
                 valueOfSecondDerivativeInTheRightLimit,
                 numberOfNodesToCalculateValues);
-                //newNodesOfgrid);
             splineData = splinedata;
             splineData.splineConstruction();
         }

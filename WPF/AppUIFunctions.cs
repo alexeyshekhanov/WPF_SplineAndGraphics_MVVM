@@ -14,12 +14,6 @@ namespace WPF
     public class AppUIFunctions : IUIFunctions
     {
 
-        private PlotModel plotModel;
-        public AppUIFunctions() //PlotModel plotModel
-        {
-            //this.plotModel = plotModel;
-        }
-
         public string UISave()
         {
             string fileName = string.Empty;
@@ -53,41 +47,5 @@ namespace WPF
             }
             return null;
         }
-
-        //public void DrawSpline(double[] rawDataX, double[] rawDataY, double[] splineDataX, double[] splineDataY)
-        //{
-        //    var legend = new Legend();
-        //    plotModel.Legends.Add(legend);
-        //    plotModel.Title = "Spline and discrete data";
-        //    plotModel.Series.Clear();
-
-        //    var splineLineseries = new LineSeries();
-        //    OxyColor color = OxyColors.Blue;
-        //    for (int i = 0; i < splineDataX.Length; i++)
-        //    {
-        //        splineLineseries.Points.Add(new DataPoint(splineDataX[i], splineDataY[i]));
-        //    }
-        //    splineLineseries.Color = color;
-        //    splineLineseries.MarkerStroke = color;
-        //    splineLineseries.MarkerFill = color;
-        //    splineLineseries.MarkerSize = 4;
-        //    splineLineseries.MarkerType = MarkerType.None;
-        //    splineLineseries.Title = "Spline data";
-        //    plotModel.Series.Add(splineLineseries);
-
-        //    var discreteLineseries = new LineSeries();
-        //    color = OxyColors.Orange;
-        //    for (int i = 0; i < rawDataX.Length; i++)
-        //    {
-        //        discreteLineseries.Points.Add(new DataPoint(rawDataX[i], rawDataY[i]));
-        //    }
-        //    discreteLineseries.Color = color;
-        //    discreteLineseries.MarkerStroke = color;
-        //    discreteLineseries.MarkerFill = color;
-        //    discreteLineseries.MarkerSize = 4;
-        //    discreteLineseries.MarkerType = MarkerType.Circle;
-        //    discreteLineseries.Title = "Discrete data";
-        //    plotModel.Series.Add(discreteLineseries);
-        //}
     }
 }

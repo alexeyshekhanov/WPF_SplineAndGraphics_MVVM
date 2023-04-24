@@ -12,6 +12,5 @@ namespace ViewModel
 
         string UIFromFile();
 
-        //void DrawSpline(double[] rawDataX, double[] rawDataY, double[] splineDataX, double[] splineDataY);
     }
 }
