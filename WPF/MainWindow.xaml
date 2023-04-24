@@ -4,27 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
-        xmlns:oxy="http://oxyplot.org/wpf"
-        
+        xmlns:oxy="http://oxyplot.org/wpf"   
         mc:Ignorable="d"
         Title="MainWindow" Height="638" Width="999">
-    <Window.CommandBindings>
+    <!--<Window.CommandBindings>
         <CommandBinding Command="{x:Static local:CustomCommands.FromControls}"
             Executed="outputAndGraphics"
             CanExecute="dataValidationFromControls"/>
         <CommandBinding Command="{x:Static local:CustomCommands.FromFile}"
             Executed="outputAndGraphicsFromFile"
             CanExecute="dataValidationFromFile"/>
-        <CommandBinding Command="ApplicationCommands.Save"
+        <CommandBinding Command="{x:Static local:CustomCommands.Save}"
             Executed="saveToFile"
             CanExecute="dataValidationForSave"/>
-    </Window.CommandBindings>
+    </Window.CommandBindings>-->
     <Window.Resources>
         <local:DataConverter x:Key="DataConverter"/>
         <local:RadioButtonConverter x:Key="RadioButtonConverter"/>
         <local:ListOfFunctionsConverter x:Key="ListOfFunctionsConverter"/>
         <local:NewCoordinatesConverter x:Key="NewCoordinatesConverter"/>
         <DataTemplate x:Key="SplineDataTemplate">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Coordinate: "/>
+                    <TextBlock Text="{Binding Path=coordinate, StringFormat= N3}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Value: "/>
+                    <TextBlock Text="{Binding Path=value, StringFormat= N3}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Second derivative: "/>
+                    <TextBlock Text="{Binding Path=valueOfSecondDerivative, StringFormat= N3}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SplineDataListTemplate">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Coordinate: "/>
@@ -102,11 +118,13 @@
                 </MultiBinding>
             </TextBox.Text>
         </TextBox>
-        <ListBox Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>
+        <!--<ListBox Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>-->
+        <ListBox ItemsSource="{Binding rawDataList}" Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>
         <Label Content="Output:" HorizontalAlignment="Left" Margin="10,191,0,0" VerticalAlignment="Top" Width="176"/>
         <Label Content="RawData nodes and values:" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="195"/>
         <Label Content="SplineData nodes, values and derivatives:" HorizontalAlignment="Left" Margin="170,222,0,0" VerticalAlignment="Top" Width="230"/>
-        <ListBox ItemTemplate="{StaticResource SplineDataTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>
+        <!--<ListBox ItemTemplate="{StaticResource SplineDataTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>-->
+        <ListBox ItemsSource="{Binding SplineDataList}" ItemTemplate="{StaticResource SplineDataListTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>
         <Label Content="Information about the node &#x0a; you've chosen:" HorizontalAlignment="Left" Margin="10,469,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.518,-0.563" Width="177" Height="44"/>
         <TextBlock Name ="TextBlockChosenNode" HorizontalAlignment="Left" Margin="15,513,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Height="82">
             <TextBlock.Text>
@@ -119,25 +137,25 @@
             </TextBlock.Text>
         </TextBlock>
         <Label Content="Value of the integral:" HorizontalAlignment="Left" Margin="216,473,0,0" VerticalAlignment="Top" Width="118"/>
-        <TextBlock Name="TextBlockValueOfTheIntegral" HorizontalAlignment="Left" Margin="216,513,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="19"/>
+        <TextBlock Text="{Binding Path=ValueOfIntegral}" Name="TextBlockValueOfTheIntegral" HorizontalAlignment="Left" Margin="216,513,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="19"/>
         <StackPanel Margin="0,0,0,504">
             <Menu>
                 <MenuItem Header="File">
-                    <MenuItem Command="ApplicationCommands.Save" Header="Save"></MenuItem>
+                    <MenuItem Command="{Binding SaveCommand}" Header="Save"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Execute">
-                    <MenuItem Click="onClickFromFileCommand" Header="RawData from File"></MenuItem>
-                    <MenuItem Command="{x:Static local:CustomCommands.FromControls}" Header="RawData from Controls"></MenuItem>
+                    <MenuItem Command="{Binding FromFileCommand}" Header="RawData from File"></MenuItem>
+                    <MenuItem Command="{Binding FromControlsCommand}" Header="RawData from Controls"></MenuItem>
                 </MenuItem>
                 <ToolBar>
-                    <Button Command="{x:Static local:CustomCommands.FromControls}" Content="From Controls"/>
-                    <Button Click="onClickFromFileCommand" Content="From file"/>
-                    <Button Command="ApplicationCommands.Save" Content="Save"/>
+                    <Button Command="{Binding FromControlsCommand}" Content="From Controls"/>
+                    <Button Command="{Binding FromFileCommand}" Content="From file"/>
+                    <Button Command="{Binding SaveCommand}" Content="Save"/>
                 </ToolBar>
             </Menu>
         </StackPanel>
 
-        <oxy:PlotView Name ="oxyPlot" Margin="405,166,0,0">
+        <oxy:PlotView Model ="{Binding plotModel}" Name ="oxyPlot" Margin="405,166,0,0">
 
         </oxy:PlotView>
 

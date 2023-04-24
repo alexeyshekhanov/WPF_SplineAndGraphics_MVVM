@@ -9,9 +9,11 @@ namespace WPF
 {
     public static class CustomCommands
     {
-        public static RoutedCommand FromControls = new RoutedCommand("FromControls", typeof(WPF.CustomCommands));
+        //public static RoutedCommand FromControls = new RoutedCommand("FromControls", typeof(WPF.CustomCommands));
 
-        public static RoutedCommand FromFile = new RoutedCommand("FromExecute", typeof(WPF.CustomCommands));
+        //public static RoutedCommand FromFile = new RoutedCommand("FromExecute", typeof(WPF.CustomCommands));
+
+        //public static RoutedCommand Save = new RoutedCommand("Save", typeof(WPF.CustomCommands));//
 
     }
 }

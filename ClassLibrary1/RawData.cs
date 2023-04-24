@@ -126,12 +126,14 @@ namespace ConsoleApp1
             }
         }
 
-        public bool Save(string filename)
+        public void Save(string filename)
         {
-            var file = new FileStream(filename, FileMode.Create);
-            BinaryWriter writer = new BinaryWriter(file);
+            FileStream file = null;
+            BinaryWriter writer = null;
             try
             {
+                file = new FileStream(filename, FileMode.Create);
+                writer = new BinaryWriter(file);
                 writer.Write(leftLimitOfSegment);
                 writer.Write(rightLimitOfSegment);
                 writer.Write(numberOfNodes);
@@ -145,37 +147,54 @@ namespace ConsoleApp1
                 else if (function == Functions.random)
                     temp = "random";
                 writer.Write(temp);
-                for (int i = 0; i < numberOfNodes; i++)
+                for (int i = 0; i < nodesOfGrid.Length; i++)
                 {
                     writer.Write(nodesOfGrid[i]);
                     writer.Write(valuesInNodes[i]);
                 }
-                return true;
+                //return true;
             }
-            catch (IOException)
+            catch (EndOfStreamException)
             {
-                Console.WriteLine("ERROR: THE STREAM ERROR");
-                return false;
+                throw new Exception("ERROR: THE STREAM IS ENDED");
+                //return false;
             }
-            catch (ArgumentNullException)
+            catch (FileNotFoundException)
             {
-                Console.WriteLine("ERROR: STRING IS NULL");
-                return false;
+                throw new Exception("ERROR: THE NAME OF THE FILE IS INVALID");
+                //return false;
             }
             catch (ObjectDisposedException)
             {
-                Console.WriteLine("ERROR: THE STREAM HAS BEEN CLOSED");
-                return false;
+                throw new Exception("ERROR: THE STREAM HAS BEEN CLOSED");
+                //return false;
+            }
+            catch (IOException)
+            {
+                throw new Exception("ERROR: THE STREAM ERROR");
+                //return false;
+            }
+
+            catch (ArgumentNullException)
+            {
+                throw new Exception("ERROR: NULL INSTEAD OF FILE NAME");
+            }
+
+            catch (ArgumentException)
+            {
+                throw new Exception("ERROR: FILE NAME ERROR");
             }
             catch
             {
-                Console.WriteLine("ERROR: UNEXPECTED ERROR WITH WRITING IN FILE");
-                return false;
+                throw new Exception("ERROR: UNEXPECTED ERROR WITH READING FROM FILE");
+                //return false;
             }
             finally
             {
-                writer.Dispose();
-                file.Dispose();
+                if (writer != null)
+                    writer.Dispose();
+                if (file != null)
+                    file.Dispose();
             }
         }
 
@@ -200,44 +219,48 @@ namespace ConsoleApp1
                     rawData.function = Functions.random;
                 rawData.nodesOfGrid = new double[rawData.numberOfNodes];
                 rawData.valuesInNodes = new double[rawData.numberOfNodes];
-                for (int i = 0; i < rawData.numberOfNodes; i++)
+                for (int i = 0; i < rawData.nodesOfGrid.Length; i++)
                 {
                     rawData.nodesOfGrid[i] = reader.ReadDouble();
                     rawData.valuesInNodes[i] = reader.ReadDouble();
                 }
             }
+            
             catch (EndOfStreamException)
             {
                 //Console.WriteLine("ERROR: THE STREAM IS ENDED");
                 throw new Exception("ERROR: THE STREAM IS ENDED");
-               //return false;
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("ERROR: THE NAME OF THE FILE IS INVALID");
-                //return false;
+                throw new Exception("ERROR: THE NAME OF THE FILE IS INVALID");
             }
             catch (ObjectDisposedException)
             {
-                Console.WriteLine("ERROR: THE STREAM HAS BEEN CLOSED");
-               //return false;
+                throw new Exception("ERROR: THE STREAM HAS BEEN CLOSED");
             }
             catch (IOException)
             {
-                Console.WriteLine("ERROR: THE STREAM ERROR");
-               //return false;
+                throw new Exception("ERROR: THE STREAM ERROR");
+            }
+            
+            catch (ArgumentNullException)
+            {
+                throw new Exception("ERROR: NULL INSTEAD OF FILE NAME");
+            }
+            
+            catch (ArgumentException)
+            {
+                throw new Exception("ERROR: FILE NAME ERROR");
             }
             catch
             {
-                Console.WriteLine("ERROR: UNEXPECTED ERROR WITH READING FROM FILE");
-                //return false;
+                throw new Exception("ERROR: UNEXPECTED ERROR WITH READING FROM FILE");
             }
             finally
             {
                 if (file != null)
-                {
                     file.Dispose();
-                }
                 if (reader != null)
                     reader.Dispose();
             }

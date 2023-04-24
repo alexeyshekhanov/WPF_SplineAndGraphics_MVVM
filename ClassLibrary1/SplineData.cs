@@ -14,7 +14,7 @@ namespace ConsoleApp1
         public RawData gridForSpline;
         public int numberOfNodesToCalculateValues;
         public List<SplineDataItem> calculatedSplineValues;
-        public double ?valueOfIntegral;
+        public double valueOfIntegral;
 
         public double valueOfSecondDerivativeInTheRightLimit;
         public double valueOfSecondDerivativeInTheLeftLimit;
@@ -43,53 +43,54 @@ namespace ConsoleApp1
 
         public void splineConstruction()
         {
-            int nx = gridForSpline.numberOfNodes;
-            int ny = 1;
-            var x = new double[gridForSpline.numberOfNodes];
-            var y = new double[gridForSpline.numberOfNodes];
-            for (int i = 0; i < gridForSpline.numberOfNodes; i++)
-            {
-                x[i] = gridForSpline.nodesOfGrid[i];
-                y[i] = gridForSpline.valuesInNodes[i];
-            }
-            double[] bc = new double[] { valueOfSecondDerivativeInTheLeftLimit, valueOfSecondDerivativeInTheRightLimit };
-            double[] scoeff = new double[ny * 4 * (nx - 1)];
-            int nsite = numberOfNodesToCalculateValues;
-
-            double[] newNodes = new double[numberOfNodesToCalculateValues];
-            newNodes[0] = gridForSpline.leftLimitOfSegment;
-            newNodes[numberOfNodesToCalculateValues - 1] = gridForSpline.rightLimitOfSegment;
-            var stepOfTheGrid = (gridForSpline.rightLimitOfSegment - gridForSpline.leftLimitOfSegment) /
-                (numberOfNodesToCalculateValues - 1);
-            for (int i = 1; i < numberOfNodesToCalculateValues - 1; i++)
-            {
-                newNodes[i] = gridForSpline.leftLimitOfSegment + stepOfTheGrid * i;
-            }
-
-            double[] site = newNodes;
-            int ndorder = 3;
-            int[] dorder = new int[3] { 1, 1, 1 };
-            var numberOfNonZeroElementsInDorder = 0;
-            for (int i = 0; i < dorder.Length; i++)
-            {
-                if (dorder[i] != 0)
-                {
-                    numberOfNonZeroElementsInDorder++;
-                }
-            }
-            double[] interpolationValues = new double[ny * numberOfNonZeroElementsInDorder * nsite];
-            double[] llim = new double[1] { gridForSpline.leftLimitOfSegment };
-            double[] rlim = new double[1] { gridForSpline.rightLimitOfSegment };
-            double[] integrationValues = new double[ny];
-            int ret = 0;
-
             try
             {
+                int nx = gridForSpline.numberOfNodes;
+                int ny = 1;
+                var x = new double[gridForSpline.numberOfNodes];
+                var y = new double[gridForSpline.numberOfNodes];
+                for (int i = 0; i < gridForSpline.numberOfNodes; i++)
+                {
+                    x[i] = gridForSpline.nodesOfGrid[i];
+                    y[i] = gridForSpline.valuesInNodes[i];
+                }
+                double[] bc = new double[] { valueOfSecondDerivativeInTheLeftLimit, valueOfSecondDerivativeInTheRightLimit };
+                double[] scoeff = new double[ny * 4 * (nx - 1)];
+                int nsite = numberOfNodesToCalculateValues;
+
+                double[] newNodes = new double[numberOfNodesToCalculateValues];
+                newNodes[0] = gridForSpline.leftLimitOfSegment;
+                newNodes[numberOfNodesToCalculateValues - 1] = gridForSpline.rightLimitOfSegment;
+                var stepOfTheGrid = (gridForSpline.rightLimitOfSegment - gridForSpline.leftLimitOfSegment) /
+                    (numberOfNodesToCalculateValues - 1);
+                for (int i = 1; i < numberOfNodesToCalculateValues - 1; i++)
+                {
+                    newNodes[i] = gridForSpline.leftLimitOfSegment + stepOfTheGrid * i;
+                }
+
+                double[] site = newNodes;
+                int ndorder = 3;
+                int[] dorder = new int[3] { 1, 1, 1 };
+                var numberOfNonZeroElementsInDorder = 0;
+                for (int i = 0; i < dorder.Length; i++)
+                {
+                    if (dorder[i] != 0)
+                    {
+                        numberOfNonZeroElementsInDorder++;
+                    }
+                }
+                double[] interpolationValues = new double[ny * numberOfNonZeroElementsInDorder * nsite];
+                double[] llim = new double[1] { gridForSpline.leftLimitOfSegment };
+                double[] rlim = new double[1] { gridForSpline.rightLimitOfSegment };
+                double[] integrationValues = new double[ny];
+                int ret = 0;
+
+            
                 Interpolation(nx, ny, x, y, bc, scoeff, nsite, site, ndorder, dorder,
                     interpolationValues, 1, llim, rlim, integrationValues, ref ret);
                 if (ret != 0)
                 {
-                    throw new Exception("ERROR");
+                    throw new Exception("ERROR: ERROR IN INTERPOLATION FUNCTION");
                 }
 
                 for (int i = 0; i < newNodes.Length; i++)
@@ -98,13 +99,10 @@ namespace ConsoleApp1
                         interpolationValues[3 * i], 
                         interpolationValues[3 * i + 1], 
                         interpolationValues[3 * i + 2]);
-                    //calculatedSplineValues.Insert(calculatedSplineValues.Count - 2, temp);
                     calculatedSplineValues.Add(temp);
                 }
 
                 valueOfIntegral = integrationValues[0];
-
-
             }
             catch (Exception ex)
             {
