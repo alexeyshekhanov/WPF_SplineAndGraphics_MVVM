@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class SplineData: IEnumerable<string>
+    public class SplineData //IEnumerable<string>
     {
         public RawData gridForSpline;
         public int numberOfNodesToCalculateValues;
@@ -41,7 +41,7 @@ namespace ConsoleApp1
             //calculatedSplineValues.Add(rightLimititem);
         }
 
-        public void splineConstruction()
+        public void SplineConstruction()
         {
             try
             {
@@ -110,22 +110,6 @@ namespace ConsoleApp1
             }
 
         }
-        public string ToLongString(string format)
-        {
-            string str = $"Grid information: {gridForSpline.ToLongString(format)}" + "\n";
-            str = str + "Number | Coordinate | Value | 1st derivative value | 2nd derivative value" + "\n";
-            for (int i = 0; i < calculatedSplineValues.Count; i++)
-            {
-                str = str + $"   {i}:        " + $"{string.Format(format, calculatedSplineValues[i].coordinate)}            " +
-                    $"{string.Format(format, calculatedSplineValues[i].value)}         " +
-                    $"{string.Format(format, calculatedSplineValues[i].valueOfFirstDerivative)}                      " +
-                    $"{string.Format(format, calculatedSplineValues[i].valueOfSecondDerivative)}" + "\n";
-            }
-            str = str + $"Value of the integral with limits {gridForSpline.leftLimitOfSegment}, " +
-                $"{gridForSpline.rightLimitOfSegment}: " + $"{valueOfIntegral}";
-
-            return str;
-        }
 
         [DllImport("\\..\\..\\..\\..\\x64\\Debug\\Dll.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Interpolation(int nx, int ny, double[] x, double[] y,
@@ -133,14 +117,14 @@ namespace ConsoleApp1
             int ndorder, int[] dorder, double[] interpolationValues,
             int nlim, double[] llim, double[] rlim, double[] integrationValues, ref int ret);
 
-        public IEnumerator<string> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        //public IEnumerator<string> GetEnumerator()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    return GetEnumerator();
+        //}
     }
 }

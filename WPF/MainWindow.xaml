@@ -27,15 +27,15 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Coordinate: "/>
-                    <TextBlock Text="{Binding Path=coordinate, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=Coordinate, StringFormat= N3}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Value: "/>
-                    <TextBlock Text="{Binding Path=value, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=Value, StringFormat= N3}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Second derivative: "/>
-                    <TextBlock Text="{Binding Path=valueOfSecondDerivative, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=ValueOfSecondDerivative, StringFormat= N3}"/>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
@@ -44,15 +44,15 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Coordinate: "/>
-                    <TextBlock Text="{Binding Path=coordinate, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=Coordinate, StringFormat= N3}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Value: "/>
-                    <TextBlock Text="{Binding Path=value, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=Value, StringFormat= N3}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Second derivative: "/>
-                    <TextBlock Text="{Binding Path=valueOfSecondDerivative, StringFormat= N3}"/>
+                    <TextBlock Text="{Binding Path=ValueOfSecondDerivative, StringFormat= N3}"/>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
@@ -102,7 +102,7 @@
         <Label Content="Left and right 2nd derivatives:" HorizontalAlignment="Left" Margin="400,86,0,0" VerticalAlignment="Top" Width="167"/>
         <TextBox Name ="TextBoxSplineDataNumberOfNodes" HorizontalAlignment="Left" Margin="572,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
             <TextBox.Text>
-                <Binding Path="numberOfNodesToCalculateValues" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                <Binding Path="NumberOfNodesToCalculateValues" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
                     <Binding.ValidationRules>
                         <DataErrorValidationRule />
                         <ExceptionValidationRule />
@@ -113,26 +113,26 @@
         <TextBox Name ="TextBoxSplineDataDerivatives" HorizontalAlignment="Left" Margin="572,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
             <TextBox.Text>
                 <MultiBinding Converter="{StaticResource DataConverter}">
-                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="valueOfSecondDerivativeInTheLeftLimit"/>
-                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="valueOfSecondDerivativeInTheRightLimit"/>
+                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="ValueOfSecondDerivativeInTheLeftLimit"/>
+                    <Binding UpdateSourceTrigger="PropertyChanged" Path ="ValueOfSecondDerivativeInTheRightLimit"/>
                 </MultiBinding>
             </TextBox.Text>
         </TextBox>
         <!--<ListBox Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>-->
-        <ListBox ItemsSource="{Binding rawDataList}" Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>
+        <ListBox ItemsSource="{Binding RawDataList}" Name ="ListBoxOutputRawData" Margin="10,248,0,0" HorizontalAlignment="Left" Width="149" Height="191" VerticalAlignment="Top"/>
         <Label Content="Output:" HorizontalAlignment="Left" Margin="10,191,0,0" VerticalAlignment="Top" Width="176"/>
         <Label Content="RawData nodes and values:" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="195"/>
         <Label Content="SplineData nodes, values and derivatives:" HorizontalAlignment="Left" Margin="170,222,0,0" VerticalAlignment="Top" Width="230"/>
         <!--<ListBox ItemTemplate="{StaticResource SplineDataTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>-->
-        <ListBox ItemsSource="{Binding SplineDataList}" ItemTemplate="{StaticResource SplineDataListTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>
+        <ListBox ItemsSource="{Binding SplineDataListEnumerable}" ItemTemplate="{StaticResource SplineDataListTemplate}" Name ="ListBoxOutputSplineData" Margin="190,248,0,0" HorizontalAlignment="Left" Width="190" Height="191" VerticalAlignment="Top"/>
         <Label Content="Information about the node &#x0a; you've chosen:" HorizontalAlignment="Left" Margin="10,469,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.518,-0.563" Width="177" Height="44"/>
         <TextBlock Name ="TextBlockChosenNode" HorizontalAlignment="Left" Margin="15,513,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Height="82">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}Coordinate: {0:N3}, &#x0a;Value: {1:N3}, &#x0a;First derivative: {2:N3}, &#x0a;Second derivative: {3:N3}">
-                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.coordinate"/>
-                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.value"/>
-                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.valueOfFirstDerivative"/>
-                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.valueOfSecondDerivative"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.Coordinate"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.Value"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.ValueOfFirstDerivative"/>
+                    <Binding ElementName="ListBoxOutputSplineData" Path="SelectedItem.ValueOfSecondDerivative"/>
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
@@ -155,7 +155,7 @@
             </Menu>
         </StackPanel>
 
-        <oxy:PlotView Model ="{Binding plotModel}" Name ="oxyPlot" Margin="405,166,0,0">
+        <oxy:PlotView Model ="{Binding PlotModel}" Name ="oxyPlot" Margin="405,166,0,0">
 
         </oxy:PlotView>
 

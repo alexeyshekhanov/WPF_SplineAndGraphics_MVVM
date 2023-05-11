@@ -15,15 +15,15 @@ namespace WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((FRaw)value == Functions.cube)
+            if ((FRaw)value == Functions.Cube)
             {
                 return "cube";
             }
-            else if ((FRaw)value == Functions.linear)
+            else if ((FRaw)value == Functions.Linear)
             {
                 return "linear";
             }
-            else if ((FRaw)value == Functions.random)
+            else if ((FRaw)value == Functions.MyRandom)
             {
                 return "random";
             }
@@ -32,20 +32,20 @@ namespace WPF
 
         public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
         {
-            FRaw tmp = Functions.cube;
+            FRaw tmp = Functions.Cube;
             if (value.ToString() == "cube")
             {
-                tmp = Functions.cube;
+                tmp = Functions.Cube;
                 return tmp;
             }
             else if (value.ToString() == "linear")
             {
-                tmp = Functions.linear;
+                tmp = Functions.Linear;
                 return tmp;
             }
             else if (value.ToString() == "random")
             {
-                tmp = Functions.random;
+                tmp = Functions.MyRandom;
                 return tmp;
             }
             return tmp;

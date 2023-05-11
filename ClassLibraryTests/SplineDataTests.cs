@@ -14,9 +14,9 @@ namespace ClassLibraryTests
         [Fact]
         public void splineConstructionTest()
         {
-            var rawData = new RawData(2, 6, 3, true, Functions.cube, new double[] {2, 4, 6}, new double[] {8, 64, 216});
+            var rawData = new RawData(2, 6, 3, true, Functions.Cube, new double[] {2, 4, 6}, new double[] {8, 64, 216});
             var splineData = new SplineData(rawData, 12, 36, 5);
-            splineData.splineConstruction();
+            splineData.SplineConstruction();
 
             var coordinates = new double[] { 2, 3, 4, 5, 6 };
             var values = new double[] { 8, 27, 64, 125, 216 };
@@ -28,10 +28,10 @@ namespace ClassLibraryTests
             Assert.Equal(320, splineData.valueOfIntegral, 5);
             for (int i = 0; i < splineData.numberOfNodesToCalculateValues; i++)
             {
-                Assert.Equal(values[i], splineData.calculatedSplineValues[i].value, precision);
-                Assert.Equal(coordinates[i], splineData.calculatedSplineValues[i].coordinate, precision);
-                Assert.Equal(valuesOfFirstDerivative[i], splineData.calculatedSplineValues[i].valueOfFirstDerivative, precision);
-                Assert.Equal(valuesOfSecondDerivative[i], splineData.calculatedSplineValues[i].valueOfSecondDerivative, precision);
+                Assert.Equal(values[i], splineData.calculatedSplineValues[i].Value, precision);
+                Assert.Equal(coordinates[i], splineData.calculatedSplineValues[i].Coordinate, precision);
+                Assert.Equal(valuesOfFirstDerivative[i], splineData.calculatedSplineValues[i].ValueOfFirstDerivative, precision);
+                Assert.Equal(valuesOfSecondDerivative[i], splineData.calculatedSplineValues[i].ValueOfSecondDerivative, precision);
             }
         }
 
@@ -40,9 +40,9 @@ namespace ClassLibraryTests
         {
             var exeption = Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                var rawData = new RawData(2, 6, 0, true, Functions.cube);
+                var rawData = new RawData(2, 6, 0, true, Functions.Cube);
                 var splineData = new SplineData(rawData, 12, 36, 5);
-                splineData.splineConstruction();
+                splineData.SplineConstruction();
             });
         }
     }

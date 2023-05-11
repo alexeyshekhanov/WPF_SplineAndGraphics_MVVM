@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class RawData: IEnumerable<string>
+    public class RawData //IEnumerable<string>
     {
         public double leftLimitOfSegment;
         public double rightLimitOfSegment;
@@ -36,7 +36,7 @@ namespace ConsoleApp1
             valuesInNodes = new double[numberOfNodes];
             //this.valuesInNodes = valuesInNodes;
             //this.nodesOfGrid = nodesOfGrid;   
-            initializeTheValues();
+            InitializeTheValues();
         }
 
         public RawData(double leftLimitOfSegment, 
@@ -79,7 +79,7 @@ namespace ConsoleApp1
 
         }
 
-        public void initializeTheValues()
+        public void InitializeTheValues()
         {
             nodesOfGrid[0] = leftLimitOfSegment;
             nodesOfGrid[numberOfNodes - 1] = rightLimitOfSegment;
@@ -140,11 +140,11 @@ namespace ConsoleApp1
                 //throw new IOException("mess");
                 writer.Write(isUniform);
                 var temp = "cube";
-                if (function == Functions.cube)
+                if (function == Functions.Cube)
                     temp = "cube";
-                else if (function == Functions.linear)
+                else if (function == Functions.Linear)
                     temp = "linear";
-                else if (function == Functions.random)
+                else if (function == Functions.MyRandom)
                     temp = "random";
                 writer.Write(temp);
                 for (int i = 0; i < nodesOfGrid.Length; i++)
@@ -212,11 +212,11 @@ namespace ConsoleApp1
                 rawData.isUniform = reader.ReadBoolean();
                 var temp = reader.ReadString();
                 if (temp == "cube")
-                    rawData.function = Functions.cube;
+                    rawData.function = Functions.Cube;
                 else if (temp == "linear")
-                    rawData.function = Functions.linear;
+                    rawData.function = Functions.Linear;
                 else if (temp == "random")
-                    rawData.function = Functions.random;
+                    rawData.function = Functions.MyRandom;
                 rawData.nodesOfGrid = new double[rawData.numberOfNodes];
                 rawData.valuesInNodes = new double[rawData.numberOfNodes];
                 for (int i = 0; i < rawData.nodesOfGrid.Length; i++)
@@ -265,35 +265,21 @@ namespace ConsoleApp1
                     reader.Dispose();
             }
         }
-        public string ToLongString(string format)
-        {
-            string res = $"Left limit of range is {string.Format(format, leftLimitOfSegment)}, " + "\n" +
-                $"Right limit of range is {string.Format(format, rightLimitOfSegment)} " + "\n" +
-                $"Number of nodes is  {numberOfNodes}" + "\n" +
-                $"Parameter of uniform is {isUniform}" + "\n" +
-                $"Function is {function.Method}" + "\n" +
-                "    Coordinates and values: " + "\n";
-            for (int i = 0; i < this.numberOfNodes; i++)
-            {
-                res = res + $"    {i}:" + $"{string.Format(format, this.nodesOfGrid[i])}, " + $"{string.Format(format, this.valuesInNodes[i])}" + "\n";
-            }
-            return res;
-        }
 
-        public IEnumerator<string> GetEnumerator()
-        {
-            var listRawData = new List<string>();
-            for (int i = 0; i < nodesOfGrid.Length; i++)
-            {
-                listRawData.Add(string.Format("{0:0.000}", nodesOfGrid[i]) + " " + string.Format("{0:0.000}", valuesInNodes[i]));
-            }
+        //public IEnumerator<string> GetEnumerator()
+        //{
+        //    var listRawData = new List<string>();
+        //    for (int i = 0; i < nodesOfGrid.Length; i++)
+        //    {
+        //        listRawData.Add(string.Format("{0:0.000}", nodesOfGrid[i]) + " " + string.Format("{0:0.000}", valuesInNodes[i]));
+        //    }
 
-            return listRawData.GetEnumerator();
-        }
+        //    return listRawData.GetEnumerator();
+        //}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    return GetEnumerator();
+        //}
     }
 }

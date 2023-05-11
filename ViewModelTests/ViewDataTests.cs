@@ -78,8 +78,8 @@ namespace ViewModelTests
         public void ValidationErrorTest()
         {
             var viewData = new ViewData(1, 0, 5, true, FunctionNames.cube, 100, 12, 36, null, null);
-            Assert.True(viewData.isValidationError());
-            Assert.True(viewData.isValidationErrorInRawData());
+            Assert.True(viewData.IsValidationError());
+            Assert.True(viewData.IsValidationErrorInRawData());
         }
 
         [Fact]
@@ -89,24 +89,24 @@ namespace ViewModelTests
             var viewData = new ViewData(2, 6, 5, true, FunctionNames.cube, 9, 12, 36, uiFunctionTest, null);
             viewData.FromControlsCommand.Execute(null);
             //Assert.True(viewData.rawDataList.Contains("Coordinate: " + "2.000" + "\nValue: " + "8.000"));
-            Assert.Equal(5, viewData.rawDataList.Count);
-            Assert.Contains("Coordinate: " + "2,000" + "\nValue: " + "8,000", viewData.rawDataList);
-            Assert.Contains("Coordinate: " + "3,000" + "\nValue: " + "27,000", viewData.rawDataList);
-            Assert.Contains("Coordinate: " + "4,000" + "\nValue: " + "64,000", viewData.rawDataList);
-            Assert.Contains("Coordinate: " + "5,000" + "\nValue: " + "125,000", viewData.rawDataList);
-            Assert.Contains("Coordinate: " + "6,000" + "\nValue: " + "216,000", viewData.rawDataList);
+            Assert.Equal(5, viewData.RawDataList.Count);
+            Assert.Contains("Coordinate: " + "2,000" + "\nValue: " + "8,000", viewData.RawDataList);
+            Assert.Contains("Coordinate: " + "3,000" + "\nValue: " + "27,000", viewData.RawDataList);
+            Assert.Contains("Coordinate: " + "4,000" + "\nValue: " + "64,000", viewData.RawDataList);
+            Assert.Contains("Coordinate: " + "5,000" + "\nValue: " + "125,000", viewData.RawDataList);
+            Assert.Contains("Coordinate: " + "6,000" + "\nValue: " + "216,000", viewData.RawDataList);
 
             var templist = new List<SplineDataItem>();
             //templist = viewData.SplineDataList.Select(x => Math.Round(x.value, 5));
-            foreach(var item in viewData.SplineDataList)
+            foreach(var item in viewData.SplineDataListEnumerable)
             {
-                templist.Add(new SplineDataItem(Math.Round(item.coordinate, 5),
-                    Math.Round(item.value, 5),
-                    Math.Round(item.valueOfFirstDerivative, 5),
-                    Math.Round(item.valueOfSecondDerivative, 5)));
+                templist.Add(new SplineDataItem(Math.Round(item.Coordinate, 5),
+                    Math.Round(item.Value, 5),
+                    Math.Round(item.ValueOfFirstDerivative, 5),
+                    Math.Round(item.ValueOfSecondDerivative, 5)));
             }
 
-            Assert.Equal(9, viewData.splineDataList.Count);
+            Assert.Equal(9, viewData.SplineDataList.Count);
 
             var splineDataItem = new SplineDataItem(2, 8, 12, 12);
             Assert.Contains(splineDataItem, templist);

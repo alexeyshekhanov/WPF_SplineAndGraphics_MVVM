@@ -8,16 +8,16 @@ namespace ConsoleApp1
 {
     public class Functions
     {
-        public static double cube(double x)
+        public static double Cube(double x)
         {
             return x * x * x;
         }
 
-        public static double linear(double x)
+        public static double Linear(double x)
         {
             return x;
         }
-        public static double random(double x)
+        public static double MyRandom(double x)
         {
             var rnd = new Random();
             return rnd.NextDouble();

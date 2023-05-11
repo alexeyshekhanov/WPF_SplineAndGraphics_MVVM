@@ -18,7 +18,7 @@ namespace ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         //public event Function1 InvalidInput;
 
-        private void onPropertyChanged(string propertyname)
+        private void OnPropertyChanged(string propertyname)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
@@ -33,10 +33,10 @@ namespace ViewModel
         public double[] nodesOfGridRD;
         public double[] valuesInNodesRD;
 
-        public ObservableCollection<string> rawDataList { get; set; }
-        public ObservableCollection<SplineDataItem> splineDataList { get; set; }
+        public ObservableCollection<string> RawDataList { get; set; }
+        public ObservableCollection<SplineDataItem> SplineDataList { get; set; }
 
-        public IEnumerable<SplineDataItem> SplineDataList => splineDataList;
+        public IEnumerable<SplineDataItem> SplineDataListEnumerable => SplineDataList;
 
         private IUIFunctions uiFunctions;
 
@@ -50,7 +50,7 @@ namespace ViewModel
         public ICommand SaveCommand { get => saveCommand; }
         public ICommand FromFileCommand { get => fromFileCommand; }
 
-        public PlotModel plotModel { get; set; }
+        public PlotModel PlotModel { get; set; }
 
         public double LeftLimitOfSegment
         {
@@ -115,10 +115,10 @@ namespace ViewModel
             }
         }
 
-        public int numberOfNodesToCalculateValues { get; set; }
+        public int NumberOfNodesToCalculateValues { get; set; }
 
-        public double valueOfSecondDerivativeInTheRightLimit { get; set; }
-        public double valueOfSecondDerivativeInTheLeftLimit { get; set; }
+        public double ValueOfSecondDerivativeInTheRightLimit { get; set; }
+        public double ValueOfSecondDerivativeInTheLeftLimit { get; set; }
         
         // public double[] newNodesOfgrid { get; set; }
 
@@ -153,15 +153,15 @@ namespace ViewModel
                             error = "Invalid number of nodes";
                         }
                         break;
-                    case nameof(numberOfNodesToCalculateValues):
-                        if(numberOfNodesToCalculateValues < 2) 
+                    case nameof(NumberOfNodesToCalculateValues):
+                        if(NumberOfNodesToCalculateValues < 2) 
                         {
                             error = "Invalid number of nodes to calculate values";
                         }
                         break;
-                    case nameof(valueOfSecondDerivativeInTheLeftLimit):
+                    case nameof(ValueOfSecondDerivativeInTheLeftLimit):
                         break;
-                    case nameof(valueOfSecondDerivativeInTheRightLimit):
+                    case nameof(ValueOfSecondDerivativeInTheRightLimit):
                         break;
                 }
                 return error;
@@ -184,9 +184,9 @@ namespace ViewModel
             this.Function = function;
             this.nodesOfGridRD = new double[numberOfNodes];
             this.valuesInNodesRD = new double[numberOfNodes];
-            this.numberOfNodesToCalculateValues = numberOfNodesToCalculateValues;
-            this.valueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
-            this.valueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
+            this.NumberOfNodesToCalculateValues = numberOfNodesToCalculateValues;
+            this.ValueOfSecondDerivativeInTheRightLimit = valueOfSecondDerivativeInTheRightLimit;
+            this.ValueOfSecondDerivativeInTheLeftLimit = valueOfSecondDerivativeInTheLeftLimit;
 
 
             this.rawData = new RawData(leftLimitOfSegment, rightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function));
@@ -195,15 +195,15 @@ namespace ViewModel
                 valueOfSecondDerivativeInTheRightLimit,
                 numberOfNodesToCalculateValues);
 
-            rawDataList = new ObservableCollection<string>();
+            RawDataList = new ObservableCollection<string>();
 
-            splineDataList = new ObservableCollection<SplineDataItem>();
+            SplineDataList = new ObservableCollection<SplineDataItem>();
             
             this.uiFunctions = uiFunctions;
             this.exceptionNotifier = exceptionNotifier;
 
             saveCommand = new RelayCommand(
-                _ => !isValidationErrorInRawData(),
+                _ => !IsValidationErrorInRawData(),
                 _ =>
                 {
                     try
@@ -218,15 +218,15 @@ namespace ViewModel
                 });
 
             fromControlsCommand = new RelayCommand(
-                _ => !isValidationError(),
+                _ => !IsValidationError(),
                 _ => 
                 {
                     try
                     {
                         //outputAndGraphics();
-                        inputFromControls();
-                        outputData();
-                        drawSpline();
+                        InputFromControls();
+                        OutputData();
+                        DrawSpline();
                     }
                     catch (Exception ex)
                     {
@@ -243,12 +243,12 @@ namespace ViewModel
                     try
                     {
                         Load(uiFunctions.UIFromFile());
-                        if (!isValidationError())
+                        if (!IsValidationError())
                         {
                             //outputAndGraphicsFromFile();
-                            inputFromFile();
-                            outputData();
-                            drawSpline();
+                            InputFromFile();
+                            OutputData();
+                            DrawSpline();
                         }
                         else
                         {
@@ -263,29 +263,29 @@ namespace ViewModel
 
                 });
         }
-        public void outputData()
+        public void OutputData()
         {
-            rawDataList.Clear();
-            splineDataList.Clear();
+            RawDataList.Clear();
+            SplineDataList.Clear();
             for (int i = 0; i < NumberOfNodes; i++)
             {
-                rawDataList.Add("Coordinate: " + string.Format("{0:0.000}", rawData.nodesOfGrid[i]) + 
+                RawDataList.Add("Coordinate: " + string.Format("{0:0.000}", rawData.nodesOfGrid[i]) + 
                     "\nValue: " + string.Format("{0:0.000}", rawData.valuesInNodes[i]));
             }
-            for (int i = 0; i < numberOfNodesToCalculateValues; i++)
+            for (int i = 0; i < NumberOfNodesToCalculateValues; i++)
             {
                 var temp = new SplineDataItem(
-                    splineData.calculatedSplineValues[i].coordinate,
-                    splineData.calculatedSplineValues[i].value,
-                    splineData.calculatedSplineValues[i].valueOfFirstDerivative,
-                    splineData.calculatedSplineValues[i].valueOfSecondDerivative
+                    splineData.calculatedSplineValues[i].Coordinate,
+                    splineData.calculatedSplineValues[i].Value,
+                    splineData.calculatedSplineValues[i].ValueOfFirstDerivative,
+                    splineData.calculatedSplineValues[i].ValueOfSecondDerivative
                     );
-                splineDataList.Add(temp);
+                SplineDataList.Add(temp);
             }
             ValueOfIntegral = splineData.valueOfIntegral;
         }
 
-        public bool isValidationErrorInRawData()
+        public bool IsValidationErrorInRawData()
         {
             if (this[nameof(LeftLimitOfSegment)] != "Invalid left limit" &&
                 this[nameof(RightLimitOfSegment)] != "Invalid right limit" &&
@@ -294,10 +294,10 @@ namespace ViewModel
             return true;
         }
 
-        public bool isValidationError()
+        public bool IsValidationError()
         {
-            if (!isValidationErrorInRawData() &&
-                this[nameof(numberOfNodesToCalculateValues)] != "Invalid number of nodes to calculate values")
+            if (!IsValidationErrorInRawData() &&
+                this[nameof(NumberOfNodesToCalculateValues)] != "Invalid number of nodes to calculate values")
                 return false;
             return true;
         }
@@ -334,48 +334,48 @@ namespace ViewModel
             }  
         }
 
-        public void inputFromFile()
+        public void InputFromFile()
         {
             var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function), nodesOfGridRD, valuesInNodesRD);
             rawData = rawdata;
 
             var splinedata = new SplineData(rawData,
-                valueOfSecondDerivativeInTheLeftLimit,
-                valueOfSecondDerivativeInTheRightLimit,
-                numberOfNodesToCalculateValues);
+                ValueOfSecondDerivativeInTheLeftLimit,
+                ValueOfSecondDerivativeInTheRightLimit,
+                NumberOfNodesToCalculateValues);
             splineData = splinedata;
-            splineData.splineConstruction();
+            splineData.SplineConstruction();
         }
 
-        public void inputFromControls()
+        public void InputFromControls()
         {
             var rawdata = new RawData(leftLimitOfSegment, RightLimitOfSegment, numberOfNodes, isUniform, StringToFrawConverter(function));
             rawData = rawdata;
-            rawData.initializeTheValues();
+            rawData.InitializeTheValues();
 
             var splinedata = new SplineData(rawData,
-                valueOfSecondDerivativeInTheLeftLimit,
-                valueOfSecondDerivativeInTheRightLimit,
-                numberOfNodesToCalculateValues);
+                ValueOfSecondDerivativeInTheLeftLimit,
+                ValueOfSecondDerivativeInTheRightLimit,
+                NumberOfNodesToCalculateValues);
             splineData = splinedata;
-            splineData.splineConstruction();
+            splineData.SplineConstruction();
         }
 
-        public void drawSpline()
+        public void DrawSpline()
         {
-            this.plotModel = new PlotModel();
+            this.PlotModel = new PlotModel();
             var legend = new Legend();
-            plotModel.Legends.Add(legend);
-            plotModel.Title = "Spline and discrete data";
-            plotModel.Series.Clear();
+            PlotModel.Legends.Add(legend);
+            PlotModel.Title = "Spline and discrete data";
+            PlotModel.Series.Clear();
 
             var splineLineseries = new LineSeries();
             OxyColor color = OxyColors.Blue;
-            for (int i = 0; i < numberOfNodesToCalculateValues; i++)
+            for (int i = 0; i < NumberOfNodesToCalculateValues; i++)
             {
                 splineLineseries.Points.Add(new DataPoint(
-                    splineData.calculatedSplineValues[i].coordinate,
-                    splineData.calculatedSplineValues[i].value));
+                    splineData.calculatedSplineValues[i].Coordinate,
+                    splineData.calculatedSplineValues[i].Value));
             }
             splineLineseries.Color = color;
             splineLineseries.MarkerStroke = color;
@@ -383,7 +383,7 @@ namespace ViewModel
             splineLineseries.MarkerSize = 4;
             splineLineseries.MarkerType = MarkerType.None;
             splineLineseries.Title = "Spline data";
-            plotModel.Series.Add(splineLineseries);
+            PlotModel.Series.Add(splineLineseries);
 
             var discreteLineseries = new LineSeries();
             color = OxyColors.Orange;
@@ -399,26 +399,26 @@ namespace ViewModel
             discreteLineseries.MarkerSize = 4;
             discreteLineseries.MarkerType = MarkerType.Circle;
             discreteLineseries.Title = "Discrete data";
-            plotModel.Series.Add(discreteLineseries);
-            onPropertyChanged(nameof(plotModel));
+            PlotModel.Series.Add(discreteLineseries);
+            OnPropertyChanged(nameof(PlotModel));
         }
 
         public FRaw StringToFrawConverter(string func)
         {
-            FRaw tmp = Functions.cube;
+            FRaw tmp = Functions.Cube;
             if (func == "cube")
             {
-                tmp = Functions.cube;
+                tmp = Functions.Cube;
                 return tmp;
             }
             else if (func == "linear")
             {
-                tmp = Functions.linear;
+                tmp = Functions.Linear;
                 return tmp;
             }
             else if (func == "random")
             {
-                tmp = Functions.random;
+                tmp = Functions.MyRandom;
                 return tmp;
             }
             return tmp;
@@ -426,15 +426,15 @@ namespace ViewModel
 
         public string FrawToStringConverter(FRaw fRaw)
         {
-            if (fRaw == Functions.cube)
+            if (fRaw == Functions.Cube)
             {
                 return "cube";
             }
-            else if (fRaw == Functions.linear)
+            else if (fRaw == Functions.Linear)
             {
                 return "linear";
             }
-            else if (fRaw == Functions.random)
+            else if (fRaw == Functions.MyRandom)
             {
                 return "random";
             }
